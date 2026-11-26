@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPEG - Sistem Informasi Kepegawaian</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HALAMAN LOGIN -->
+    <div id="login-section" class="login-container">
+        <div class="login-box">
+            <h2>Login SIMPEG</h2>
+            <p>Sistem Informasi Kepegawaian Berbasis Cloud</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username (admin)" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password (admin123)" required>
+                </div>
+                <button type="submit" class="btn-primary full-width">Masuk Sistem</button>
+            </form>
+            <small class="hint">Akun Demo: <b>admin</b> / <b>admin123</b></small>
+        </div>
+    </div>
+
+    <!-- HALAMAN DASHBOARD UTAMA -->
+    <div id="dashboard-section" class="hidden">
+        <nav class="navbar">
+            <div class="brand">SIMPEG CLOUD</div>
+            <div class="nav-user">
+                <span id="user-display">Halo, Admin HRD</span>
+                <button onclick="logout()" class="btn-danger">Keluar</button>
+            </div>
+        </nav>
+
+        <main class="container">
+            <!-- KARTU STATISTIK -->
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <h3>Total Pegawai</h3>
+                    <p id="stat-total">0</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Pegawai Tetap</h3>
+                    <p id="stat-tetap">0</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Pegawai Kontrak</h3>
+                    <p id="stat-kontrak">0</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Total Departemen</h3>
+                    <p>5</p>
+                </div>
+            </section>
+
+            <!-- KONTROL & TABEL DATA PEGAWAI -->
+            <section class="card table-section">
+                <div class="table-header">
+                    <h2>Daftar Data Pegawai</h2>
+                    <div class="actions">
+                        <button onclick="openModal()" class="btn-primary">+ Tambah Pegawai</button>
+                        <button onclick="resetData50()" class="btn-secondary">Reset 50 Data Awal</button>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="Cari NIP atau Nama Pegawai...">
+                    <select id="dept-filter" onchange="filterTable()">
+                        <option value="">Semua Departemen</option>
+                        <option value="IT & Sistem Informasi">IT & Sistem Informasi</option>
+                        <option value="Keuangan">Keuangan</option>
+                        <option value="SDM / HRD">SDM / HRD</option>
+                        <option value="Operasional">Operasional</option>
+                        <option value="Pemasaran">Pemasaran</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIP</th>
+                                <th>Nama Lengkap</th>
+                                <th>L/P</th>
+                                <th>Departemen</th>
+                                <th>Jabatan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pegawai-tbody">
+                            <!-- Data di-render otomatis oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL FORM TAMBAH / EDIT PEGAWAI -->
+    <div id="pegawai-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title">Tambah Data Pegawai</h3>
+            <form id="pegawai-form">
+                <input type="hidden" id="edit-index">
+                <div class="form-group">
+                    <label>NIP</label>
+                    <input type="text" id="nip" required>
+                </div>
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="nama" required>
+                </div>
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <select id="jk" required>
+                        <option value="L">Laki-laki (L)</option>
+                        <option value="P">Perempuan (P)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Departemen</label>
+                    <select id="departemen" required>
+                        <option value="IT & Sistem Informasi">IT & Sistem Informasi</option>
+                        <option value="Keuangan">Keuangan</option>
+                        <option value="SDM / HRD">SDM / HRD</option>
+                        <option value="Operasional">Operasional</option>
+                        <option value="Pemasaran">Pemasaran</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jabatan</label>
+                    <select id="jabatan" required>
+                        <option value="Manajer">Manajer</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Staf Senior">Staf Senior</option>
+                        <option value="Staf Junior">Staf Junior</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status Kerja</label>
+                    <select id="status" required>
+                        <option value="Tetap">Tetap</option>
+                        <option value="Kontrak">Kontrak</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary full-width">Simpan Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
